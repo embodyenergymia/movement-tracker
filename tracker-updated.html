@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewired Movement Lab - Progress Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fahkwang:wght@400;600&family=Karla:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #3F6D6D 0%, #6FB2A5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #E58765;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-family: 'Fahkwang', sans-serif;
+            font-weight: 400;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-family: 'Karla', sans-serif;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .nav-tab {
+            font-family: 'Fahkwang', sans-serif;
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab.active {
+            color: #E58765;
+            border-bottom-color: #E58765;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section {
+            background: #F9F9EF;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .section h2 {
+            font-family: 'Fahkwang', sans-serif;
+            font-weight: 400;
+            color: #3F6D6D;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h3 {
+            font-family: 'Fahkwang', sans-serif;
+            font-weight: 400;
+            color: #3F6D6D;
+            font-size: 16px;
+            margin: 20px 0 10px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #3F6D6D;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        input[type="text"], 
+        input[type="number"], 
+        textarea, 
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #E58765;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #E58765;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #E58765;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .value-display {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #E58765;
+            margin: 10px 0;
+        }
+        
+        .drill-list {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .drill-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .drill-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .drill-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .button {
+            font-family: 'Fahkwang', sans-serif;
+            font-weight: 600;
+            background: #E58765;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(229, 135, 101, 0.4);
+            background: #d67555;
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button.secondary {
+            background: #3F6D6D;
+        }
+        
+        .button.secondary:hover {
+            box-shadow: 0 10px 20px rgba(63, 109, 109, 0.4);
+            background: #355d5d;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #E58765;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .history-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #E58765;
+        }
+        
+        .history-date {
+            font-weight: 600;
+            color: #3F6D6D;
+            margin-bottom: 8px;
+        }
+        
+        .history-details {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        .alert {
+            background: #F9F9EF;
+            border-left: 4px solid #E58765;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #3F6D6D;
+        }
+        
+        .success-message {
+            background: #F9F9EF;
+            border-left: 4px solid #E58765;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            color: #3F6D6D;
+            display: none;
+        }
+        
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .before-after > div {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .chart-title {
+            font-family: 'Fahkwang', sans-serif;
+            color: #3F6D6D;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #6FB2A5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #3F6D6D;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 600px) {
+            .before-after {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Rewired Movement Lab</h1>
+            <p>Building capability, tracking wins</p>
+            <p style="font-size: 14px; margin-top: 8px; opacity: 0.85;">Share your progress once a month to help improve this program</p>
+        </div>
+        
+        <div class="content">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('track')">Track Session</button>
+                <button class="nav-tab" onclick="switchTab('weekly')">Weekly Check-in</button>
+                <button class="nav-tab" onclick="switchTab('progress')">My Progress</button>
+                <button class="nav-tab" onclick="switchTab('share')">Share Data</button>
+            </div>
+            
+            <!-- TRACK SESSION TAB -->
+            <div id="track" class="tab-content active">
+                <div class="alert">
+                    <strong>Your February Protocol:</strong> 1x Core Practice per week + 3-5 Movement Snacks. Track before and after each session!
+                    <br><br>
+                    <strong>Movement Snack = 1 Brain-Based Drill + 1 Nutritious Movement</strong>
+                    <br>
+                    Create your own or choose from the Hub.
+                </div>
+                
+                <div class="section">
+                    <h2>📋 What are you doing today?</h2>
+                    <div class="form-group">
+                        <label>Session Type</label>
+                        <select id="sessionType" onchange="updateDrillList()">
+                            <option value="">-- Select Session Type --</option>
+                            <option value="core1">Core Practice 1 (Full Workout)</option>
+                            <option value="core2">Core Practice 2 (Full Workout)</option>
+                            <option value="snack">Movement Snack (Quick Integration)</option>
+                            <option value="individual">Individual Practice (Create Your Own)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="section" id="beforeSection" style="display:none;">
+                    <h2>📊 Before Session</h2>
+                    <p style="color: #6b7280; margin-bottom: 20px;">How do you feel RIGHT NOW before starting?</p>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Pain Level</span>
+                            <span>1 (none) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="beforePain" min="1" max="10" value="5" oninput="updateValue('beforePainValue', this.value)">
+                        <div class="value-display" id="beforePainValue">5</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Movement Limitation</span>
+                            <span>1 (none) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="beforeMovement" min="1" max="10" value="5" oninput="updateValue('beforeMovementValue', this.value)">
+                        <div class="value-display" id="beforeMovementValue">5</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Chronic Stress</span>
+                            <span>1 (calm) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="beforeStress" min="1" max="10" value="5" oninput="updateValue('beforeStressValue', this.value)">
+                        <div class="value-display" id="beforeStressValue">5</div>
+                    </div>
+                </div>
+                
+                <div class="section" id="drillSection" style="display:none;">
+                    <h2>✅ Drills Completed</h2>
+                    <div id="drillList" class="drill-list"></div>
+                    
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(255,255,255,0.5);">
+                        <h3 style="font-family: 'Fahkwang', sans-serif; color: #3F6D6D; font-size: 16px; margin-bottom: 10px;">
+                            ➕ Add Custom Drill
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="customDrillInput" placeholder="Enter custom drill name..." style="flex: 1;" onkeypress="if(event.key === 'Enter') addCustomDrill()">
+                            <button class="button" onclick="addCustomDrill()" style="width: auto; margin-top: 0; padding: 12px 20px;">Add</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section" id="afterSection" style="display:none;">
+                    <h2>📊 After Session</h2>
+                    <p style="color: #6b7280; margin-bottom: 20px;">How do you feel NOW after your session?</p>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Pain Level</span>
+                            <span>1 (none) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="afterPain" min="1" max="10" value="5" oninput="updateValue('afterPainValue', this.value)">
+                        <div class="value-display" id="afterPainValue">5</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Movement Limitation</span>
+                            <span>1 (none) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="afterMovement" min="1" max="10" value="5" oninput="updateValue('afterMovementValue', this.value)">
+                        <div class="value-display" id="afterMovementValue">5</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Chronic Stress</span>
+                            <span>1 (calm) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="afterStress" min="1" max="10" value="5" oninput="updateValue('afterStressValue', this.value)">
+                        <div class="value-display" id="afterStressValue">5</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notes (optional)</label>
+                        <textarea id="sessionNotes" placeholder="Anything else notable about this session?"></textarea>
+                    </div>
+                    
+                    <button class="button" onclick="saveSession()">Save Session</button>
+                </div>
+                
+                <div class="success-message" id="sessionSuccess">
+                    ✅ Session saved! Great work!
+                </div>
+            </div>
+            
+            <!-- WEEKLY CHECK-IN TAB -->
+            <div id="weekly" class="tab-content">
+                <div class="section">
+                    <h2>📅 Weekly Check-in</h2>
+                    <p style="color: #6b7280; margin-bottom: 20px;">How are you feeling this week overall?</p>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Pain Level</span>
+                            <span>1 (none) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="weeklyPain" min="1" max="10" value="5" oninput="updateValue('weeklyPainValue', this.value)">
+                        <div class="value-display" id="weeklyPainValue">5</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Movement Limitation</span>
+                            <span>1 (none) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="weeklyMovement" min="1" max="10" value="5" oninput="updateValue('weeklyMovementValue', this.value)">
+                        <div class="value-display" id="weeklyMovementValue">5</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Chronic Stress</span>
+                            <span>1 (calm) - 10 (severe)</span>
+                        </div>
+                        <input type="range" id="weeklyStress" min="1" max="10" value="5" oninput="updateValue('weeklyStressValue', this.value)">
+                        <div class="value-display" id="weeklyStressValue">5</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>🎯 Meaningful Goal</h2>
+                    <div class="form-group">
+                        <label>What's your meaningful movement goal?</label>
+                        <input type="text" id="meaningfulGoal" placeholder="e.g., Running without pain, Playing with kids on the floor">
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>🏆 Wins This Week</h2>
+                    <p style="color: #6b7280; margin-bottom: 15px;">What were your wins? What are you capable of?</p>
+                    <div class="form-group">
+                        <textarea id="weeklyWins" placeholder="Track your wins, not just your symptoms. What did you accomplish? What felt good?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Anything else notable this week? (optional)</label>
+                        <textarea id="weeklyContext" placeholder="Sleep quality, stress events, illness, energy levels, etc."></textarea>
+                    </div>
+                    
+                    <button class="button" onclick="saveWeekly()">Save Weekly Check-in</button>
+                </div>
+                
+                <div class="success-message" id="weeklySuccess">
+                    ✅ Weekly check-in saved!
+                </div>
+            </div>
+            
+            <!-- PROGRESS TAB -->
+            <div id="progress" class="tab-content">
+                <div class="info-box">
+                    <strong>📱 Your Data is Saved Automatically</strong><br>
+                    All your tracking data is saved in your browser and available every time you return to this tracker. Your progress stays with you! 
+                    <br><br>
+                    <em>Note: Data is stored on this device/browser. If you switch devices or clear your browser data, your history won't transfer.</em>
+                </div>
+                
+                <div class="section">
+                    <h2>📈 Your Progress</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalSessions">0</div>
+                            <div class="stat-label">Total Sessions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="coreCount">0</div>
+                            <div class="stat-label">Core Practices</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="snackCount">0</div>
+                            <div class="stat-label">Movement Snacks</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>📉 Progress Trends</h2>
+                    <p style="color: #6b7280; margin-bottom: 20px; font-size: 14px;">Track your improvements over time</p>
+                    
+                    <div class="chart-container">
+                        <div class="chart-title">Pain Level</div>
+                        <canvas id="painChart" height="80"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-title">Movement Limitation</div>
+                        <canvas id="movementChart" height="80"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-title">Stress Level</div>
+                        <canvas id="stressChart" height="80"></canvas>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>📊 Recent Sessions</h2>
+                    <div id="recentSessions"></div>
+                </div>
+                
+                <div class="section">
+                    <h2>📝 Weekly Check-ins</h2>
+                    <div id="weeklyHistory"></div>
+                </div>
+            </div>
+            
+            <!-- SHARE DATA TAB -->
+            <div id="share" class="tab-content">
+                <div class="section">
+                    <h2>📤 Share Your Data</h2>
+                    <p style="color: #6b7280; margin-bottom: 20px;">
+                        Help improve the program by sharing your anonymous tracking data. This helps identify what's working and what needs adjustment.
+                    </p>
+                    
+                    <div class="alert">
+                        <strong>Privacy:</strong> Your data is shared anonymously with only your anonymous ID - no personal information is included.
+                    </div>
+                    
+                    <h3 style="font-family: 'Fahkwang', sans-serif; color: #3F6D6D; font-size: 18px; margin: 25px 0 15px 0;">
+                        📋 Option 1: Upload to Google Form (Recommended)
+                    </h3>
+                    <p style="color: #6b7280; margin-bottom: 15px; font-size: 14px;">
+                        Click below to download your data, then upload it through our Google Form.
+                    </p>
+                    <button class="button" onclick="exportDataForForm()">Download & Go to Form</button>
+                    
+                    <h3 style="font-family: 'Fahkwang', sans-serif; color: #3F6D6D; font-size: 18px; margin: 25px 0 15px 0;">
+                        ✉️ Option 2: Email Directly
+                    </h3>
+                    <p style="color: #6b7280; margin-bottom: 15px; font-size: 14px;">
+                        Download your data file and email it as an attachment to:
+                    </p>
+                    <p style="color: #E58765; font-weight: 600; margin-bottom: 15px; font-size: 16px;">
+                        mia@embodyenergy.net
+                    </p>
+                    <button class="button secondary" onclick="exportData()">Download My Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Drill library - organized by category
+        const brainBasedDrills = [
+            'Lateral Ankle Tilts',
+            'Medial Ankle Tilts',
+            'Lateral Shifting (Vestibular)',
+            'Vertical Saccule Bouncing (Vestibular)',
+            'Balance Progression - Eyes Open',
+            'Balance Progression - Eyes Closed',
+            'Straw Breathing',
+            'Near-Far Vision Drill',
+            'Knee Circles',
+            'Hip Circles',
+            'Single Leg Hip Circle/Figure Eight',
+            'In-line Balance Assessment',
+            'Crossbody Movement Integration'
+        ];
+        
+        const nutritiousMovement = [
+            'Lunge with Focus on Aligned Pelvis',
+            'Easy Pelvic List',
+            'Calf Stretches (External Target)',
+            'Calf Stretches (Half Foam Dome)'
+        ];
+        
+        const drills = {
+            core1: [...brainBasedDrills, ...nutritiousMovement],
+            core2: [...brainBasedDrills, ...nutritiousMovement],
+            snack: [...brainBasedDrills, ...nutritiousMovement],
+            individual: [...brainBasedDrills, ...nutritiousMovement]
+        };
+        
+        // Initialize storage
+        function initStorage() {
+            if (!localStorage.getItem('userData')) {
+                const userData = {
+                    userId: 'user_' + Math.random().toString(36).substr(2, 9),
+                    sessions: [],
+                    weeklyCheckins: [],
+                    meaningfulGoal: ''
+                };
+                localStorage.setItem('userData', JSON.stringify(userData));
+            }
+        }
+        
+        function getUserData() {
+            return JSON.parse(localStorage.getItem('userData'));
+        }
+        
+        function saveUserData(data) {
+            localStorage.setItem('userData', JSON.stringify(data));
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'progress') {
+                updateProgress();
+            }
+        }
+        
+        // Update drill list based on session type
+        function updateDrillList() {
+            const sessionType = document.getElementById('sessionType').value;
+            if (!sessionType) {
+                document.getElementById('beforeSection').style.display = 'none';
+                document.getElementById('drillSection').style.display = 'none';
+                document.getElementById('afterSection').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('beforeSection').style.display = 'block';
+            document.getElementById('drillSection').style.display = 'block';
+            document.getElementById('afterSection').style.display = 'block';
+            
+            const drillList = document.getElementById('drillList');
+            drillList.innerHTML = '';
+            
+            // Add Brain-Based Drills section
+            const brainHeader = document.createElement('h3');
+            brainHeader.style.cssText = 'font-family: Fahkwang, sans-serif; color: #3F6D6D; font-size: 16px; margin: 15px 0 10px 0; font-weight: 600;';
+            brainHeader.textContent = '🧠 Brain-Based Drills';
+            drillList.appendChild(brainHeader);
+            
+            let drillIndex = 0;
+            brainBasedDrills.forEach((drill) => {
+                const drillItem = document.createElement('div');
+                drillItem.className = 'drill-item';
+                drillItem.innerHTML = `
+                    <input type="checkbox" id="drill_${drillIndex}" value="${drill}">
+                    <label for="drill_${drillIndex}">${drill}</label>
+                `;
+                drillList.appendChild(drillItem);
+                drillIndex++;
+            });
+            
+            // Add Nutritious Movement section
+            const movementHeader = document.createElement('h3');
+            movementHeader.style.cssText = 'font-family: Fahkwang, sans-serif; color: #3F6D6D; font-size: 16px; margin: 20px 0 10px 0; font-weight: 600;';
+            movementHeader.textContent = '🌿 Nutritious Movement';
+            drillList.appendChild(movementHeader);
+            
+            nutritiousMovement.forEach((drill) => {
+                const drillItem = document.createElement('div');
+                drillItem.className = 'drill-item';
+                drillItem.innerHTML = `
+                    <input type="checkbox" id="drill_${drillIndex}" value="${drill}">
+                    <label for="drill_${drillIndex}">${drill}</label>
+                `;
+                drillList.appendChild(drillItem);
+                drillIndex++;
+            });
+            
+            // Clear custom drill input
+            document.getElementById('customDrillInput').value = '';
+        }
+        
+        // Add custom drill
+        function addCustomDrill() {
+            const customDrillInput = document.getElementById('customDrillInput');
+            const drillName = customDrillInput.value.trim();
+            
+            if (!drillName) {
+                alert('Please enter a drill name');
+                return;
+            }
+            
+            const drillList = document.getElementById('drillList');
+            const currentDrillCount = drillList.children.length;
+            
+            const drillItem = document.createElement('div');
+            drillItem.className = 'drill-item';
+            drillItem.style.backgroundColor = '#fff3e6'; // Slight highlight for custom drills
+            drillItem.innerHTML = `
+                <input type="checkbox" id="custom_drill_${currentDrillCount}" value="${drillName}">
+                <label for="custom_drill_${currentDrillCount}">${drillName} (Custom)</label>
+            `;
+            drillList.appendChild(drillItem);
+            
+            // Clear input
+            customDrillInput.value = '';
+        }
+        
+        // Update value display
+        function updateValue(elementId, value) {
+            document.getElementById(elementId).textContent = value;
+        }
+        
+        // Save session
+        function saveSession() {
+            const sessionType = document.getElementById('sessionType').value;
+            if (!sessionType) {
+                alert('Please select a session type');
+                return;
+            }
+            
+            const completedDrills = [];
+            document.querySelectorAll('#drillList input[type="checkbox"]:checked').forEach(checkbox => {
+                completedDrills.push(checkbox.value);
+            });
+            
+            const sessionData = {
+                date: new Date().toISOString(),
+                type: sessionType,
+                drills: completedDrills,
+                before: {
+                    pain: parseInt(document.getElementById('beforePain').value),
+                    movement: parseInt(document.getElementById('beforeMovement').value),
+                    stress: parseInt(document.getElementById('beforeStress').value)
+                },
+                after: {
+                    pain: parseInt(document.getElementById('afterPain').value),
+                    movement: parseInt(document.getElementById('afterMovement').value),
+                    stress: parseInt(document.getElementById('afterStress').value)
+                },
+                notes: document.getElementById('sessionNotes').value,
+                painChange: parseInt(document.getElementById('beforePain').value) - parseInt(document.getElementById('afterPain').value),
+                movementChange: parseInt(document.getElementById('beforeMovement').value) - parseInt(document.getElementById('afterMovement').value),
+                stressChange: parseInt(document.getElementById('beforeStress').value) - parseInt(document.getElementById('afterStress').value)
+            };
+            
+            const userData = getUserData();
+            userData.sessions.push(sessionData);
+            saveUserData(userData);
+            
+            // Show success message
+            document.getElementById('sessionSuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('sessionSuccess').style.display = 'none';
+            }, 3000);
+            
+            // Reset form
+            document.getElementById('sessionType').value = '';
+            document.getElementById('sessionNotes').value = '';
+            updateDrillList();
+            
+            // Reset sliders
+            ['beforePain', 'beforeMovement', 'beforeStress', 'afterPain', 'afterMovement', 'afterStress'].forEach(id => {
+                document.getElementById(id).value = 5;
+                updateValue(id + 'Value', 5);
+            });
+        }
+        
+        // Save weekly check-in
+        function saveWeekly() {
+            const weeklyData = {
+                date: new Date().toISOString(),
+                pain: parseInt(document.getElementById('weeklyPain').value),
+                movement: parseInt(document.getElementById('weeklyMovement').value),
+                stress: parseInt(document.getElementById('weeklyStress').value),
+                wins: document.getElementById('weeklyWins').value,
+                context: document.getElementById('weeklyContext').value
+            };
+            
+            const userData = getUserData();
+            userData.weeklyCheckins.push(weeklyData);
+            
+            const goal = document.getElementById('meaningfulGoal').value;
+            if (goal) {
+                userData.meaningfulGoal = goal;
+            }
+            
+            saveUserData(userData);
+            
+            // Show success message
+            document.getElementById('weeklySuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('weeklySuccess').style.display = 'none';
+            }, 3000);
+            
+            // Reset form
+            document.getElementById('weeklyWins').value = '';
+            document.getElementById('weeklyContext').value = '';
+        }
+        
+        // Update progress display
+        function updateProgress() {
+            const userData = getUserData();
+            
+            // Calculate stats
+            const totalSessions = userData.sessions.length;
+            const coreCount = userData.sessions.filter(s => s.type.startsWith('core')).length;
+            const snackCount = userData.sessions.filter(s => s.type === 'snack').length;
+            
+            // Calculate streak (simplified - sessions in last 7 days)
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const recentSessions = userData.sessions.filter(s => new Date(s.date) > weekAgo);
+            
+            document.getElementById('totalSessions').textContent = totalSessions;
+            document.getElementById('coreCount').textContent = coreCount;
+            document.getElementById('snackCount').textContent = snackCount;
+            document.getElementById('currentStreak').textContent = recentSessions.length;
+            
+            // Display recent sessions
+            const recentSessionsDiv = document.getElementById('recentSessions');
+            recentSessionsDiv.innerHTML = '';
+            
+            const last5Sessions = userData.sessions.slice(-5).reverse();
+            if (last5Sessions.length === 0) {
+                recentSessionsDiv.innerHTML = '<p style="color: #6b7280;">No sessions yet. Start tracking!</p>';
+            } else {
+                last5Sessions.forEach(session => {
+                    const date = new Date(session.date);
+                    const typeLabel = session.type === 'core1' ? 'Core Practice 1' : 
+                                    session.type === 'core2' ? 'Core Practice 2' : 'Movement Snack';
+                    
+                    const painChange = session.painChange > 0 ? `↓${session.painChange}` : 
+                                      session.painChange < 0 ? `↑${Math.abs(session.painChange)}` : '→';
+                    const movementChange = session.movementChange > 0 ? `↓${session.movementChange}` : 
+                                          session.movementChange < 0 ? `↑${Math.abs(session.movementChange)}` : '→';
+                    const stressChange = session.stressChange > 0 ? `↓${session.stressChange}` : 
+                                        session.stressChange < 0 ? `↑${Math.abs(session.stressChange)}` : '→';
+                    
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-date">${date.toLocaleDateString()} - ${typeLabel}</div>
+                        <div class="history-details">
+                            Pain: ${session.before.pain} → ${session.after.pain} ${painChange} | 
+                            Movement: ${session.before.movement} → ${session.after.movement} ${movementChange} | 
+                            Stress: ${session.before.stress} → ${session.after.stress} ${stressChange}<br>
+                            Drills: ${session.drills.length} completed
+                            ${session.notes ? '<br>Notes: ' + session.notes : ''}
+                        </div>
+                    `;
+                    recentSessionsDiv.appendChild(historyItem);
+                });
+            }
+            
+            // Display weekly check-ins
+            const weeklyHistoryDiv = document.getElementById('weeklyHistory');
+            weeklyHistoryDiv.innerHTML = '';
+            
+            const last5Weeklies = userData.weeklyCheckins.slice(-5).reverse();
+            if (last5Weeklies.length === 0) {
+                weeklyHistoryDiv.innerHTML = '<p style="color: #6b7280;">No weekly check-ins yet.</p>';
+            } else {
+                last5Weeklies.forEach(weekly => {
+                    const date = new Date(weekly.date);
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-date">${date.toLocaleDateString()}</div>
+                        <div class="history-details">
+                            Pain: ${weekly.pain} | Movement: ${weekly.movement} | Stress: ${weekly.stress}<br>
+                            <strong>Wins:</strong> ${weekly.wins}<br>
+                            ${weekly.context ? '<strong>Context:</strong> ' + weekly.context : ''}
+                        </div>
+                    `;
+                    weeklyHistoryDiv.appendChild(historyItem);
+                });
+            }
+            
+            // Load meaningful goal
+            if (userData.meaningfulGoal) {
+                document.getElementById('meaningfulGoal').value = userData.meaningfulGoal;
+            }
+            
+            // Draw trend charts
+            drawTrendCharts();
+        }
+        
+        // Draw trend charts
+        function drawTrendCharts() {
+            const userData = getUserData();
+            if (userData.sessions.length === 0) return;
+            
+            // Prepare data
+            const sessions = userData.sessions.slice(-10); // Last 10 sessions
+            const dates = sessions.map(s => new Date(s.date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}));
+            const painData = sessions.map(s => s.after.pain);
+            const movementData = sessions.map(s => s.after.movement);
+            const stressData = sessions.map(s => s.after.stress);
+            
+            // Draw Pain Chart
+            drawChart('painChart', dates, painData, '#E58765');
+            
+            // Draw Movement Chart
+            drawChart('movementChart', dates, movementData, '#6FB2A5');
+            
+            // Draw Stress Chart
+            drawChart('stressChart', dates, stressData, '#3F6D6D');
+        }
+        
+        // Simple chart drawing function
+        function drawChart(canvasId, labels, data, color) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            if (data.length === 0) {
+                ctx.fillStyle = '#6b7280';
+                ctx.font = '14px Karla';
+                ctx.textAlign = 'center';
+                ctx.fillText('No data yet - start tracking!', width/2, height/2);
+                return;
+            }
+            
+            // Setup
+            const padding = 40;
+            const chartWidth = width - padding * 2;
+            const chartHeight = height - padding * 2;
+            const maxValue = 10;
+            const minValue = 1;
+            const valueRange = maxValue - minValue;
+            
+            // Draw gridlines and labels
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            ctx.font = '12px Karla';
+            ctx.fillStyle = '#6b7280';
+            ctx.textAlign = 'right';
+            
+            for (let i = minValue; i <= maxValue; i += 2) {
+                const y = padding + chartHeight - ((i - minValue) / valueRange * chartHeight);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+                ctx.fillText(i, padding - 10, y + 4);
+            }
+            
+            // Draw line
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            const pointSpacing = chartWidth / (data.length - 1 || 1);
+            
+            data.forEach((value, index) => {
+                const x = padding + (index * pointSpacing);
+                const y = padding + chartHeight - ((value - minValue) / valueRange * chartHeight);
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                // Draw point
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            ctx.strokeStyle = color;
+            ctx.stroke();
+            
+            // Draw trend direction indicator
+            if (data.length >= 2) {
+                const firstValue = data[0];
+                const lastValue = data[data.length - 1];
+                const improvement = firstValue - lastValue;
+                
+                ctx.font = 'bold 14px Karla';
+                ctx.textAlign = 'right';
+                
+                if (improvement > 0) {
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillText(`↓ Improving (${improvement.toFixed(1)} points)`, width - padding, padding - 10);
+                } else if (improvement < 0) {
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillText(`↑ Increasing (${Math.abs(improvement).toFixed(1)} points)`, width - padding, padding - 10);
+                } else {
+                    ctx.fillStyle = '#6b7280';
+                    ctx.fillText('→ Stable', width - padding, padding - 10);
+                }
+            }
+        }
+        
+        // Export data
+        function exportData() {
+            const userData = getUserData();
+            const exportData = {
+                anonymousId: userData.userId,
+                exportDate: new Date().toISOString(),
+                sessions: userData.sessions,
+                weeklyCheckins: userData.weeklyCheckins,
+                meaningfulGoal: userData.meaningfulGoal
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `movement-tracker-data-${userData.userId}.json`;
+            link.click();
+        }
+        
+        // Export data and open Google Form
+        function exportDataForForm() {
+            // First download the data
+            exportData();
+            
+            // Then open the Google Form in a new tab after a brief delay
+            setTimeout(() => {
+                window.open('https://docs.google.com/forms/d/e/1FAIpQLSf9R01yIH_uiSOjbbsg-ZocbI3JPCPeBXnRpGC1KOs9QahUzg/viewform?usp=share_link', '_blank');
+            }, 500);
+        }
+        
+        // Initialize on load
+        initStorage();
+        updateProgress();
+    </script>
+</body>
+</html>
